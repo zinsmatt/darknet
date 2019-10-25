@@ -236,9 +236,16 @@ image **load_alphabet()
     return alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes, char* filename)
 {
     int i,j;
+    FILE *fp;
+    if (filename)
+    {
+        fp = fopen(filename, "w");
+        fprintf(fp, "# x, y, w, h, angle, label\n");
+    }
+
 
     for(i = 0; i < num; ++i){
         char labelstr[4096] = {0};
@@ -253,6 +260,13 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
                     strcat(labelstr, names[j]);
                 }
                 printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
+                printf("Bounding Box: %f %f %f %f %d\n", dets[i].bbox.x * im.w,
+                dets[i].bbox.y * im.h, dets[i].bbox.w * im.w, dets[i].bbox.h * im.h, class);
+                if (filename)
+                {
+                    fprintf(fp, "%f %f %f %f 0.0 %d\n", dets[i].bbox.x * im.w,
+                                        dets[i].bbox.y * im.h, dets[i].bbox.w * im.w, dets[i].bbox.h * im.h, class);
+                }
             }
         }
         if(class >= 0){
@@ -307,6 +321,9 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             }
         }
     }
+
+    if (filename)
+        fclose(fp);
 }
 
 void transpose_image(image im)

@@ -601,7 +601,13 @@ void test_detector(char *datacfg, char *cfgfile, char *weightfile, char *filenam
         //printf("%d\n", nboxes);
         //if (nms) do_nms_obj(boxes, probs, l.w*l.h*l.n, l.classes, nms);
         if (nms) do_nms_sort(dets, nboxes, l.classes, nms);
-        draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes);
+
+        char path[2048];
+        strcpy(path, outfile);
+        char* ext = ".txt";
+        strcat(path, ext);
+
+        draw_detections(im, dets, nboxes, thresh, names, alphabet, l.classes, path);
         free_detections(dets, nboxes);
         if(outfile){
             save_image(im, outfile);

@@ -1,3 +1,7 @@
+## Fork
+I modified the detect example in order to save the detected bounding box parameters to be saved in .txt files.
+I also added a python script that runs the detect example on several files.
+
 ![Darknet Logo](http://pjreddie.com/media/files/darknet-black-small.png)
 
 # Darknet #
